@@ -40,7 +40,7 @@ This is a distinct deployment. The self-host setup gives everyone admitted by Cl
 
 ## Current constraints and evidence
 
-- This fork had no GitHub Actions runs at the start of this work, so its remote CI still needs verification.
+- GitHub Actions was enabled on this fork on 2026-09-26. It had no runs before that change; the draft PR's CI still needs verification.
 - Local baseline on Node 22.23.3 and pnpm 10.30.1: `ci:check` passed; 1,436 root tests and 33 website tests passed; the worker and website builds passed. The website's Miniflare test and prerender build needed localhost permission in this sandbox. No live SEO workflow or Cloudflare deployment was run.
 - The machine defaults to Node 26 and pnpm 11; the pinned toolchain was used through temporary npm package binaries. Docker is not installed.
 - `docs/SELF_HOSTING_CLOUDFLARE.md` requires Cloudflare R2, Access, and DataForSEO. `docs/SELF_HOSTING_DOCKER.md` describes the local-only auth and rank scheduling limits.

@@ -12,7 +12,7 @@ The fork currently matches the upstream `every-app/open-seo` HEAD. It already co
 
 **Chosen route:** deploy this source to a private Cloudflare self-host stage. The repository's Cloudflare guide provisions D1, KV, R2, Workers, and a Cloudflare Access gate. It also retains scheduled rank checks. Docker is a useful local evaluation route, but the default Compose file pulls `ghcr.io/every-app/open-seo:latest` rather than an image from this fork. Docker uses `local_noauth` and does not run rank tracking schedules.
 
-1. **Establish a reproducible baseline.** Use Node 22 or 24 and the pinned `pnpm@10.30.1`; install with the frozen lockfile. The local checks, tests, and builds passed on 2026-09-26. Obtain a green CI run in this fork before changing features. Record the exact commit and deployment version. Keep upstream as a read-only remote and review incoming changes before merging them.
+1. **Establish a reproducible baseline.** Use Node 22 or 24 and the pinned `pnpm@10.30.1`; install with the frozen lockfile. The local checks, tests, and builds passed on 2026-09-26, and the fork's first CI run passed both application and Docker jobs. Record the exact commit and deployment version. Keep upstream as a read-only remote and review incoming changes before merging them.
 2. **Prepare accounts and secrets.** Use a Cloudflare account with R2 enabled, a DataForSEO account and credential, and the exact email addresses allowed through Cloudflare Access. Keep `.env.selfhost` out of Git. Add OpenRouter only when testing the in-app AI agent; Google OAuth is optional for Search Console and Analytics. Set a small test budget and monitor the DataForSEO balance during live tests.
 3. **Deploy a private stage from the fork.** Follow `docs/SELF_HOSTING_CLOUDFLARE.md` using a stage and Cloudflare account owned by this project. Verify the Access challenge before sharing the URL. Check `/api/health`, logs, and the database status after deployment.
 4. **Run one complete workflow on a real domain.** Create a project; research and save keywords; run a site audit; add and check a small rank tracking set twice; inspect domain/backlink data; produce a report. Test Search Console and MCP only if they are part of your immediate workflow. Record broken steps, confusing copy, latency, and the DataForSEO cost of each workflow.
@@ -34,15 +34,15 @@ This is a distinct deployment. The self-host setup gives everyone admitted by Cl
 
 ## Work order for the next iteration
 
-1. Get a green GitHub Actions CI run on this fork. The equivalent local checks have passed.
-2. Provision the private Cloudflare deployment and run the real-domain smoke test.
-3. Convert findings into a short prioritized issue list before changing features.
+1. Provision the private Cloudflare deployment and run the real-domain smoke test.
+2. Convert findings into a short prioritized issue list before changing features.
 
 ## Current constraints and evidence
 
-- GitHub Actions was enabled on this fork on 2026-09-26. It had no runs before that change; the draft PR's CI still needs verification.
+- GitHub Actions was enabled on this fork on 2026-09-26. The first [CI run](https://github.com/janisbelozerovs-dev/open-seo/actions/runs/36268672342) passed both the application and Docker image build jobs.
 - Local baseline on Node 22.23.3 and pnpm 10.30.1: `ci:check` passed; 1,436 root tests and 33 website tests passed; the worker and website builds passed. The website's Miniflare test and prerender build needed localhost permission in this sandbox. No live SEO workflow or Cloudflare deployment was run.
 - The machine defaults to Node 26 and pnpm 11; the pinned toolchain was used through temporary npm package binaries. Docker is not installed.
+- No `.env.selfhost` file or local Alchemy login profile was present at the start of the Cloudflare setup work.
 - `docs/SELF_HOSTING_CLOUDFLARE.md` requires Cloudflare R2, Access, and DataForSEO. `docs/SELF_HOSTING_DOCKER.md` describes the local-only auth and rank scheduling limits.
 - `compose.yaml` defaults to the upstream image; `.github/workflows/docker-image.yml` publishes only when the repository is `every-app/open-seo`.
 - `alchemy.run.ts` and `docs/PREVIEW_DEPLOYMENTS.md` contain upstream production names and domains; `web/` contains upstream marketing and signup links.
